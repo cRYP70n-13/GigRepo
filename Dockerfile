@@ -21,6 +21,7 @@ ENV TERM xterm
 # PACKAGE INSTALLATIONS
 ##########################################
 COPY scripts/* .
+COPY php.ini .
 RUN ["bash", "script.sh"]
 
 # PUY Your PACKAGE INSTALLATIONS Here
@@ -53,6 +54,9 @@ RUN set -ex ; chmod 0700 /usr/local/sbin/healthcheck.sh; ansible-playbook -i 'lo
 
 RUN sha512sum /root/* /var/www/html/* /etc/passwd /etc/shadow > /usr/local/lib/.sha512sum; chmod 0400 /usr/local/lib/.sha512sum; chmod 0700 /entrypoint.sh
 RUN chmod 0400 /usr/local/lib/.sha512sum
+RUN rm /etc/apache2/sites-available/000-default.conf; mv litecart.conf /etc/apache2/sites-available/; mv /etc/apache2/sites-available/litecart.conf /etc/apache2/sites-available/000-default.conf
+RUN service apache2 start
+RUN ["bash", "create_database.sh"]
 
 ##############
 # HEALTHCHECK

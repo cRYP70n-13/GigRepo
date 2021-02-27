@@ -18,10 +18,9 @@ service mariadb start
 service apache2 enable
 service mariadb enable
 
-# cat /etc/php/7.3/apache2/php.ini
-
-
-# Here we should open the file php.ini to do some changes
+# The necessary changes in php.ini file
+rm /etc/php/7.3/apache2/php.ini
+cp php.ini /etc/php/7.3/apache2/
 
 # Configure MariaDB
 # NOTE: Bring the create db here ...
