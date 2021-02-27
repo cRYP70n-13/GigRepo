@@ -33,14 +33,15 @@ COPY *.yml /tmp/
 # RUN COMMANDS
 ################
 COPY scripts/* .
-RUN ["bash", "script.sh"]
+# RUN ["bash", "script.sh"]
 
 # Setup the timezone
 ENV TZ=Africa/Casablanca
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN rm -rf /etc/nginx/conf.d/
+COPY nginx.conf /etc/nginx/
 
 # Add your commands here
-# They are in the script
 
 #################################
 # RUN playbook and generate
@@ -58,6 +59,6 @@ RUN chmod 0400 /usr/local/lib/.sha512sum
 HEALTHCHECK --interval=12s --timeout=12s --start-period=30s CMD /usr/local/sbin/healthcheck.sh
 
 # RUNTIME
-WORKDIR /
-CMD ["tail -f /var/log/nginx/error.log"]
-ENTRYPOINT ["entrypoint.sh"]
+# WORKDIR /
+# CMD ["tail -f /var/log/nginx/error.log"]
+ENTRYPOINT ["/bin/bash", "script.sh"]
